@@ -1,26 +1,31 @@
 {
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base", "schedule:weekly", "group:allNonMajor"],
   "labels": ["dependencies"],
-  "ignorePaths": [
-    "packages/playground/**",
-    "packages/create-vite/template-*/**",
-    "**/__tests__/**"
-  ],
-  "pin": false,
+  "ignorePaths": ["**/__tests__/**"],
   "rangeStrategy": "bump",
-  "node": false,
+  "packageRules": [
+    {
+      "depTypeList": ["peerDependencies"],
+      "enabled": false,
+    },
+  ],
   "ignoreDeps": [
     // manually bumping
     "esbuild",
     "rollup",
-    "@vue/compiler-sfc",
     "node",
+    "typescript",
+    "eslint-plugin-react-hooks", // prevent bumping to messy -rc-<hash>-<date>
+    "@rollup/plugin-dynamic-import-vars", // prefer version using tinyglobby
+    "@types/express", // express latest is still on v4, so types should also be v4
+
+    // pinned
+    "slash3",
+    "slash5",
+    "vue32",
 
     // breaking changes
-    "source-map",
-    "react-refresh",
-
-    // breaks since "3.0.1", needs futher investigate
-    "postcss-load-config"
-  ]
+    "kill-port", // `kill-port:^2.0.0 has perf issues (#8392)
+  ],
 }
